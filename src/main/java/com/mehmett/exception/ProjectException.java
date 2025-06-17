@@ -1,8 +1,12 @@
 package com.mehmett.exception;
 
+import lombok.Getter;
+
+@Getter
 public class ProjectException extends RuntimeException {
-	
-	public ProjectException(String message) {
-		super(message);
+	private ErrorType errorType;
+	public ProjectException(ErrorType errorType) {
+		super(errorType.getMessage());
+		this.errorType=errorType;
 	}
 }

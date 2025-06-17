@@ -9,9 +9,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @ControllerAdvice
 public class GlobalExceptionHandler_x {
-	@ExceptionHandler(ProjectException.class)
+	@ExceptionHandler(ProjectException.class) // İstisnayı yakalayan kısım
 	@ResponseBody
-	public ResponseEntity<BaseResponse<Boolean>> projectException (ProjectException exception){
-		return new ResponseEntity<>(BaseResponse.<Boolean>builder().build(), HttpStatus.BAD_REQUEST);
+	public ResponseEntity<ErrorMessage> projectException (ProjectException exception){
+		// ResponseEntity.ok() --> 200 OK. success her şey yolunda
+		// ResponseEntity.badRequest() --> 400 gelen istek hatalı
+		// ResponseEntity.internalServerError() --> Sunucu tarafında bir hata oluştu
+		return new ResponseEntity<>(ErrorMessage.builder()
+				                            .success(false)
+				                            .message(exception.getErrorType().getMessage())
+				                            .code(exception.getErrorType().getCode())
+				                            .build(), exception.getErrorType().getHttpStatus());
 	}
 }
